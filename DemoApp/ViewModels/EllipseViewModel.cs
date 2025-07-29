@@ -1,15 +1,12 @@
 ﻿
 using Avalonia.Media;
+using CommunityToolkit.Mvvm.ComponentModel;
 using DiagramDesigner;
 
 namespace DemoApp.ViewModels;
 
-internal class EllipseViewModel : DesignerItemViewModelBase
+internal partial class EllipseViewModel : DesignerItemViewModelBase
 {
+    [ObservableProperty]
     private Color fillColor = Colors.Green;
-    public Color FillColor
-    {
-        get => fillColor; 
-        set => SetProperty(ref fillColor, value);
-    }
 }

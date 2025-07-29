@@ -6,130 +6,129 @@ using System.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 
-namespace DiagramDesigner
+namespace DiagramDesigner;
+
+public class DiagramViewModel : ViewModelBase, IDiagramViewModel, IRecipient<DoneDrawingMessage>
 {
-    public class DiagramViewModel : ViewModelBase, IDiagramViewModel, IRecipient<DoneDrawingMessage>
+    private ObservableCollection<SelectableDesignerItemViewModelBase> items = new ObservableCollection<SelectableDesignerItemViewModelBase>();
+
+    public DiagramViewModel()
     {
-        private ObservableCollection<SelectableDesignerItemViewModelBase> items = new ObservableCollection<SelectableDesignerItemViewModelBase>();
+        AddItemCommand = new RelayCommand<object>(ExecuteAddItemCommand);
+        RemoveItemCommand = new RelayCommand<object>(ExecuteRemoveItemCommand);
+        ClearSelectedItemsCommand = new RelayCommand<object>(ExecuteClearSelectedItemsCommand);
+        CreateNewDiagramCommand = new RelayCommand<object>(ExecuteCreateNewDiagramCommand);
 
-        public DiagramViewModel()
+        items.CollectionChanged += Items_CollectionChanged;
+
+        //Mediator.Instance.Register(this);
+        WeakReferenceMessenger.Default.Register<DoneDrawingMessage>(this);
+    }
+
+    //[MediatorMessageSink("DoneDrawingMessage")]
+    private void OnDoneDrawingMessage()
+    {
+        foreach (var item in Items.OfType<DesignerItemViewModelBase>())
         {
-            AddItemCommand = new RelayCommand<object>(ExecuteAddItemCommand);
-            RemoveItemCommand = new RelayCommand<object>(ExecuteRemoveItemCommand);
-            ClearSelectedItemsCommand = new RelayCommand<object>(ExecuteClearSelectedItemsCommand);
-            CreateNewDiagramCommand = new RelayCommand<object>(ExecuteCreateNewDiagramCommand);
-
-            items.CollectionChanged += Items_CollectionChanged;
-
-            //Mediator.Instance.Register(this);
-            WeakReferenceMessenger.Default.Register<DoneDrawingMessage>(this);
+            item.ShowConnectors = false;
         }
+    }
 
-        //[MediatorMessageSink("DoneDrawingMessage")]
-        private void OnDoneDrawingMessage()
+    void IRecipient<DoneDrawingMessage>.Receive(DoneDrawingMessage message) => OnDoneDrawingMessage();
+
+    public RelayCommand<object> AddItemCommand { get; private set; }
+    public RelayCommand<object> RemoveItemCommand { get; private set; }
+    public RelayCommand<object> ClearSelectedItemsCommand { get; private set; }
+    public RelayCommand<object> CreateNewDiagramCommand { get; private set; }
+
+    public ObservableCollection<SelectableDesignerItemViewModelBase> Items
+    {
+        get { return items; }
+    }
+
+    public List<SelectableDesignerItemViewModelBase> SelectedItems
+    {
+        get { return Items.Where(x => x.IsSelected).ToList(); }
+    }
+
+    public SelectableDesignerItemViewModelBase SelectedItem
+    {
+        get { return SelectedItems.OrderByDescending(x => x.SelectedTime).FirstOrDefault(); }
+    }
+
+    private void ExecuteAddItemCommand(object parameter)
+    {
+        if (parameter is SelectableDesignerItemViewModelBase)
         {
-            foreach (var item in Items.OfType<DesignerItemViewModelBase>())
+            SelectableDesignerItemViewModelBase item = (SelectableDesignerItemViewModelBase)parameter;
+            item.Parent = this;
+            items.Add(item);
+        }
+    }
+
+    private void ExecuteRemoveItemCommand(object parameter)
+    {
+        if (parameter is SelectableDesignerItemViewModelBase)
+        {
+            SelectableDesignerItemViewModelBase item = (SelectableDesignerItemViewModelBase)parameter;
+            items.Remove(item);
+        }
+    }
+
+    private void ExecuteClearSelectedItemsCommand(object parameter)
+    {
+        foreach (SelectableDesignerItemViewModelBase item in Items)
+        {
+            item.IsSelected = false;
+        }
+    }
+
+    private void ExecuteCreateNewDiagramCommand(object parameter)
+    {
+        Items.Clear();
+    }
+
+    public void Add(SelectableDesignerItemViewModelBase item)
+    {
+        if (item != null && !items.Contains(item))
+        {
+            item.Parent = this;
+            items.Add(item);
+        }
+    }
+
+    public void Remove(SelectableDesignerItemViewModelBase item)
+    {
+        if (item != null && items.Contains(item))
+        {
+            items.Remove(item);
+        }
+    }
+
+    private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.OldItems != null)
+        {
+            foreach (var item in e.OldItems.OfType<SelectableDesignerItemViewModelBase>())
             {
-                item.ShowConnectors = false;
+                item.PropertyChanged -= Item_PropertyChanged;
             }
         }
 
-        void IRecipient<DoneDrawingMessage>.Receive(DoneDrawingMessage message) => OnDoneDrawingMessage();
-
-        public RelayCommand<object> AddItemCommand { get; private set; }
-        public RelayCommand<object> RemoveItemCommand { get; private set; }
-        public RelayCommand<object> ClearSelectedItemsCommand { get; private set; }
-        public RelayCommand<object> CreateNewDiagramCommand { get; private set; }
-
-        public ObservableCollection<SelectableDesignerItemViewModelBase> Items
+        if (e.NewItems != null)
         {
-            get { return items; }
-        }
-
-        public List<SelectableDesignerItemViewModelBase> SelectedItems
-        {
-            get { return Items.Where(x => x.IsSelected).ToList(); }
-        }
-
-        public SelectableDesignerItemViewModelBase SelectedItem
-        {
-            get { return SelectedItems.OrderByDescending(x => x.SelectedTime).FirstOrDefault(); }
-        }
-
-        private void ExecuteAddItemCommand(object parameter)
-        {
-            if (parameter is SelectableDesignerItemViewModelBase)
+            foreach (var item in e.NewItems.OfType<SelectableDesignerItemViewModelBase>())
             {
-                SelectableDesignerItemViewModelBase item = (SelectableDesignerItemViewModelBase)parameter;
-                item.Parent = this;
-                items.Add(item);
+                item.PropertyChanged += Item_PropertyChanged;
             }
         }
+    }
 
-        private void ExecuteRemoveItemCommand(object parameter)
+    private void Item_PropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == "IsSelected")
         {
-            if (parameter is SelectableDesignerItemViewModelBase)
-            {
-                SelectableDesignerItemViewModelBase item = (SelectableDesignerItemViewModelBase)parameter;
-                items.Remove(item);
-            }
-        }
-
-        private void ExecuteClearSelectedItemsCommand(object parameter)
-        {
-            foreach (SelectableDesignerItemViewModelBase item in Items)
-            {
-                item.IsSelected = false;
-            }
-        }
-
-        private void ExecuteCreateNewDiagramCommand(object parameter)
-        {
-            Items.Clear();
-        }
-
-        public void Add(SelectableDesignerItemViewModelBase item)
-        {
-            if (item != null && !items.Contains(item))
-            {
-                item.Parent = this;
-                items.Add(item);
-            }
-        }
-
-        public void Remove(SelectableDesignerItemViewModelBase item)
-        {
-            if (item != null && items.Contains(item))
-            {
-                items.Remove(item);
-            }
-        }
-
-        private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (e.OldItems != null)
-            {
-                foreach (var item in e.OldItems.OfType<SelectableDesignerItemViewModelBase>())
-                {
-                    item.PropertyChanged -= Item_PropertyChanged;
-                }
-            }
-
-            if (e.NewItems != null)
-            {
-                foreach (var item in e.NewItems.OfType<SelectableDesignerItemViewModelBase>())
-                {
-                    item.PropertyChanged += Item_PropertyChanged;
-                }
-            }
-        }
-
-        private void Item_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "IsSelected")
-            {
-                OnPropertyChanged("SelectedItem");
-            }
+            OnPropertyChanged("SelectedItem");
         }
     }
 }

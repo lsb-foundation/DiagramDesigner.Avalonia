@@ -24,7 +24,6 @@ internal class DesignerCanvas : Canvas
     {
         DragDrop.SetAllowDrop(this, true);
         DragDrop.DropEvent.AddClassHandler<DesignerCanvas>(OnDrop);
-        //Keyboard.Register(this);
     }
 
     public Connector SourceConnector
@@ -58,12 +57,11 @@ internal class DesignerCanvas : Canvas
                 // drag operation we cache the start point
                 rubberbandSelectionStartPoint = e.GetPosition(this);
 
-                //IDiagramViewModel vm = (this.DataContext as IDiagramViewModel);
-                
-                //if (e.KeyModifiers != KeyModifiers.Control)
-                //{
-                //    vm.ClearSelectedItemsCommand.Execute(null);
-                //}
+                if (e.KeyModifiers != KeyModifiers.Control)
+                {
+                    IDiagramViewModel vm = DataContext as IDiagramViewModel;
+                    vm.ClearSelectedItemsCommand.Execute(null);
+                }
                 e.Handled = true;
             }
         }
