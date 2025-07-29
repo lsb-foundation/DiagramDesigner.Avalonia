@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Input;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DiagramDesigner;
 
@@ -11,6 +12,7 @@ public class DragObject : DataObject
 
     public Size? DesireMinSize { get; set; }
 
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]
     public Type ContentType { get; set; }
 
     public string Icon { get; set; }
