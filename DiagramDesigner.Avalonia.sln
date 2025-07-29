@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36310.24 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiagramDesigner", "DiagramDesigner\DiagramDesigner.csproj", "{81686AB6-DE56-F8E4-1BB5-921A0D4B833C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoApp", "DemoApp\DemoApp.csproj", "{A1C9A7D1-0571-4649-B327-D25C7CAC6B80}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{81686AB6-DE56-F8E4-1BB5-921A0D4B833C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81686AB6-DE56-F8E4-1BB5-921A0D4B833C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81686AB6-DE56-F8E4-1BB5-921A0D4B833C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81686AB6-DE56-F8E4-1BB5-921A0D4B833C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1C9A7D1-0571-4649-B327-D25C7CAC6B80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1C9A7D1-0571-4649-B327-D25C7CAC6B80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1C9A7D1-0571-4649-B327-D25C7CAC6B80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1C9A7D1-0571-4649-B327-D25C7CAC6B80}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FD415AB0-171D-4820-B024-7FAB47CD28C2}
+	EndGlobalSection
+EndGlobal

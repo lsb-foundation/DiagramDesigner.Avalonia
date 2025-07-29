@@ -1,0 +1,33 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:s="using:DiagramDesigner"
+			 mc:Ignorable="d"
+             x:Class="DiagramDesigner.ConnectorContainer">
+	
+	<ItemsControl ItemsSource="{Binding $parent.Connectors}">
+		
+		<ItemsControl.Styles>
+			<Style Selector="ContentPresenter" x:DataType="s:FullyCreatedConnectorInfo">
+				<Setter Property="ClipToBounds" Value="False"/>
+				<Setter Property="ContentTemplate">
+					<DataTemplate DataType="s:FullyCreatedConnectorInfo">
+						<s:Connector IsVisible="{Binding $parent[s:ConnectorContainer].IsReady}"/>
+					</DataTemplate>
+				</Setter>
+			</Style>
+		</ItemsControl.Styles>
+		
+		<ItemsControl.ItemsPanel>
+			<ItemsPanelTemplate>
+				<Canvas Loaded="RootCanvas_Loaded"
+						HorizontalAlignment="Stretch"
+						VerticalAlignment="Stretch"
+						ClipToBounds="False"/>
+			</ItemsPanelTemplate>
+		</ItemsControl.ItemsPanel>
+		
+	</ItemsControl>
+	
+</UserControl>

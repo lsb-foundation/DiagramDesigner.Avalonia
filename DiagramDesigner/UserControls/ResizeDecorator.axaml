@@ -1,0 +1,80 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:s="using:DiagramDesigner"
+			 ClipToBounds="False"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="DiagramDesigner.ResizeDecorator">
+	<Panel>
+		<Panel Opacity="0" Margin="-3">
+			<s:ResizeThumb Height="3"
+						   Cursor="SizeNorthSouth"
+						   VerticalAlignment="Top"
+						   HorizontalAlignment="Stretch"/>
+			<s:ResizeThumb Width="3"
+						   Cursor="SizeWestEast"
+						   VerticalAlignment="Stretch"
+						   HorizontalAlignment="Left"/>
+			<s:ResizeThumb Width="3"
+						   Cursor="SizeWestEast"
+						   VerticalAlignment="Stretch"
+						   HorizontalAlignment="Right"/>
+			<s:ResizeThumb Height="3"
+						   Cursor="SizeNorthSouth"
+						   VerticalAlignment="Bottom"
+						   HorizontalAlignment="Stretch"/>
+			<s:ResizeThumb Width="7"
+						   Height="7"
+						   Margin="-2"
+						   Cursor="TopLeftCorner"
+						   VerticalAlignment="Top"
+						   HorizontalAlignment="Left"/>
+			<s:ResizeThumb Width="7"
+						   Height="7"
+						   Margin="-2"
+						   Cursor="TopRightCorner"
+						   VerticalAlignment="Top"
+						   HorizontalAlignment="Right"/>
+			<s:ResizeThumb Width="7"
+						   Height="7"
+						   Margin="-2"
+						   Cursor="BottomLeftCorner"
+						   VerticalAlignment="Bottom"
+						   HorizontalAlignment="Left"/>
+			<s:ResizeThumb Width="7"
+						   Height="7"
+						   Margin="-2"
+						   Cursor="BottomRightCorner"
+						   VerticalAlignment="Bottom"
+						   HorizontalAlignment="Right"/>
+		</Panel>
+		<Panel IsHitTestVisible="False" Opacity="1" Margin="-3">
+			<Rectangle StrokeThickness="1"
+					   Margin="1"
+					   Stroke="Gray"/>
+			<Ellipse HorizontalAlignment="Left" VerticalAlignment="Top"/>
+			<Ellipse HorizontalAlignment="Right" VerticalAlignment="Top"/>
+			<Ellipse HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+			<Ellipse HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+			<Panel.Styles>
+				<Style Selector="Ellipse">
+					<Setter Property="Stroke" Value="#ffc8c8c8"/>
+					<Setter Property="StrokeThickness" Value="0.5"/>
+					<Setter Property="Width" Value="7"/>
+					<Setter Property="Height" Value="7"/>
+					<Setter Property="Margin" Value="-2"/>
+					<Setter Property="Fill">
+						<RadialGradientBrush Center="0.2,0.2"
+											 GradientOrigin="0.2,0.2"
+											 RadiusX="0.8"
+											 RadiusY="0.8">
+							<GradientStop Color="White" Offset="0"/>
+							<GradientStop Color="Gray" Offset="0.8"/>
+						</RadialGradientBrush>
+					</Setter>
+				</Style>
+			</Panel.Styles>
+		</Panel>
+	</Panel>
+</UserControl>

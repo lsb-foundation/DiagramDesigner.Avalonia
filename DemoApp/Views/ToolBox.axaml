@@ -1,0 +1,57 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:s="avalonia.diagram.designer"
+			 xmlns:local="using:DemoApp"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="DemoApp.ToolBox">
+
+	<UserControl.DataTemplates>
+
+		<DataTemplate DataType="s:ToolBoxData">
+			<Panel ToolTip.Tip="{Binding Description}">
+				<Rectangle StrokeDashArray="2"
+						   Stroke="WhiteSmoke"
+						   Margin="-3"
+						   StrokeThickness="1"/>
+				<TextBlock HorizontalAlignment="Center"
+						   VerticalAlignment="Center"
+						   Foreground="White"
+						   Text="{Binding Text}"/>
+				<Panel.Styles>
+					<Style Selector="Rectangle">
+						<Setter Property="IsVisible" Value="False"/>
+					</Style>
+					<Style Selector="Panel:pointerover > Rectangle">
+						<Setter Property="IsVisible" Value="True"/>
+					</Style>
+				</Panel.Styles>
+			</Panel>
+		</DataTemplate>
+		
+	</UserControl.DataTemplates>
+
+	<Panel Background="BlueViolet">
+		<ItemsControl ItemsSource="{Binding $parent[local:ToolBox].ToolBoxDataCollection}"
+					  HorizontalAlignment="Center">
+			<ItemsControl.ItemsPanel>
+				<ItemsPanelTemplate>
+					<StackPanel Orientation="Horizontal"/>
+				</ItemsPanelTemplate>
+			</ItemsControl.ItemsPanel>
+
+			<ItemsControl.Styles>
+				<Style Selector="ContentPresenter">
+					<Setter Property="Margin" Value="5"/>
+					<Setter Property="Height" Value="30"/>
+					<Setter Property="Width" Value="60"/>
+					<Setter Property="Cursor" Value="SizeAll"/>
+					<Setter Property="s:DragAndDropProps.EnableForDrag" Value="True"/>
+				</Style>
+			</ItemsControl.Styles>
+		</ItemsControl>
+	</Panel>
+
+
+</UserControl>

@@ -1,0 +1,110 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:s="using:DiagramDesigner">
+
+	<ControlTheme x:Key="{x:Type s:Connector}" TargetType="s:Connector">
+		<Setter Property="Template">
+			<ControlTemplate>
+				<s:DesignerItemPanel Width="{x:Static s:ConnectorInfoBase.ConnectorWidth}"
+									 Height="{x:Static s:ConnectorInfoBase.ConnectorHeight}"
+									 Cursor="Cross">
+					<!--transparent extra space makes connector easier to hit-->
+					<Ellipse Name="outter"
+							 Stretch="Uniform"
+							 Fill="Transparent"
+							 Opacity="0.3"
+							 Margin="0"/>
+					<Ellipse Name="inner"
+							 Margin="3"
+							 Stretch="Uniform"
+							 Fill="Lavender"
+							 StrokeThickness="1"
+							 Stroke="#aa000080"/>
+					<Panel.Styles>
+						<Style Selector="s|DesignerItemPanel:pointerover, s|DesignerItemPanel:prepared">
+							<Style Selector="^ > Ellipse#outter">
+								<Setter Property="Margin" Value="0" />
+								<Setter Property="Fill" Value="#f73438" />
+							</Style>
+							<Style Selector="^ > Ellipse#inner">
+								<Setter Property="Fill" Value="#f73438" />
+								<Setter Property="Stroke" Value="#f73438" />
+							</Style>
+						</Style>
+					</Panel.Styles>
+				</s:DesignerItemPanel>
+			</ControlTemplate>
+		</Setter>
+	</ControlTheme>
+
+	<ControlTheme x:Key="{x:Type s:DragThumb}" TargetType="s:DragThumb">
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Rectangle Fill="Transparent"
+						   StrokeThickness="0"
+						   Stroke="Gray"/>
+			</ControlTemplate>
+		</Setter>
+	</ControlTheme>
+
+	<ControlTheme x:Key="{x:Type s:ResizeThumb}" TargetType="s:ResizeThumb">
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Rectangle Fill="Transparent"
+						   StrokeThickness="0"
+						   Stroke="Gray"/>
+			</ControlTemplate>
+		</Setter>
+	</ControlTheme>
+
+	<DataTemplate x:Key="designerItemTemplate"
+				  DataType="s:DesignerItemViewModelBase">
+		<s:DesignerItemPanel Width="{Binding ItemWidth}"
+							 Height="{Binding ItemHeight}"
+							 s:SelectionProps.EnableForSelection="True">
+			<s:DragThumb x:Name="PART_DragThumb"
+						 Cursor="SizeAll"
+						 Margin="-3"/>
+			<Panel>
+				<s:ResizeDecorator x:Name="PART_ResizeDecorator"
+								   IsVisible="{Binding IsSelected}"/>
+				<ContentPresenter HorizontalAlignment="Stretch"
+								  VerticalAlignment="Stretch"
+								  Content="{Binding $parent[ContentPresenter].Content}"/>
+				<s:ConnectorContainer x:Name="PART_ConnectorDecorator"
+									  Connectors="{Binding Connectors}"/>
+			</Panel>
+			
+			<Panel.Styles>
+				<Style Selector="s|ConnectorContainer#PART_ConnectorDecorator">
+					<Setter Property="IsVisible" Value="False"/>
+				</Style>
+				<Style Selector="s|DesignerItemPanel:pointerover, s|DesignerItemPanel:prepared">
+					<Style Selector="^ s|ConnectorContainer#PART_ConnectorDecorator">
+						<Setter Property="IsVisible" Value="True"/>
+					</Style>
+				</Style>
+			</Panel.Styles>
+		</s:DesignerItemPanel>
+	</DataTemplate>
+
+	<DataTemplate x:Key="connectionTemplate"
+				  DataType="s:ConnectionViewModel">
+		<Canvas Width="{Binding Area.Width}"
+				Height="{Binding Area.Height}"
+				s:SelectionProps.EnableForSelection="True">
+			<Polyline Classes.selected="{Binding IsSelected}"
+					  Points="{Binding ConnectionPoints}"
+					  StrokeThickness="{Binding LineWidth}"/>
+			<Canvas.Styles>
+				<Style Selector="Polyline">
+					<Setter Property="Stroke" Value="{Binding LineColor, Converter={x:Static s:ColorBrushConverter.Instance}}"/>
+				</Style>
+				<Style Selector="Polyline.selected">
+					<Setter Property="Stroke" Value="Black"/>
+				</Style>
+			</Canvas.Styles>
+		</Canvas>
+	</DataTemplate>
+	
+</ResourceDictionary>
