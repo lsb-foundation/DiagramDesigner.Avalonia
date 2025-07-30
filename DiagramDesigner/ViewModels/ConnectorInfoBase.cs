@@ -2,8 +2,8 @@
 
 public abstract class ConnectorInfoBase : ViewModelBase
 {
-    private static double connectorWidth = 16;
-    private static double connectorHeight = 16;
+    private static readonly double connectorWidth = 16;
+    private static readonly double connectorHeight = 16;
 
     public ConnectorInfoBase(ConnectorOrientation orientation)
     {

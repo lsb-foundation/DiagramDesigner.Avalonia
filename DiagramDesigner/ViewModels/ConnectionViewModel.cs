@@ -129,7 +129,7 @@ public class ConnectionViewModel : SelectableDesignerItemViewModelBase
                 sourceConnectorInfo = value;
                 SourceA = PointHelper.GetPointForConnector(this.SourceConnectorInfo);
                 OnPropertyChanged();
-                (sourceConnectorInfo.DataItem as INotifyPropertyChanged).PropertyChanged += new WeakINPCEventHandler(ConnectorViewModel_PropertyChanged).Handler;
+                (sourceConnectorInfo.DataItem as INotifyPropertyChanged).PropertyChanged += new WeakEventHandler(ConnectorViewModel_PropertyChanged).Handler;
             }
         }
     }
@@ -145,7 +145,7 @@ public class ConnectionViewModel : SelectableDesignerItemViewModelBase
                 if (SinkConnectorInfo is FullyCreatedConnectorInfo)
                 {
                     SourceB = PointHelper.GetPointForConnector((FullyCreatedConnectorInfo)SinkConnectorInfo);
-                    (((FullyCreatedConnectorInfo)sinkConnectorInfo).DataItem as INotifyPropertyChanged).PropertyChanged += new WeakINPCEventHandler(ConnectorViewModel_PropertyChanged).Handler;
+                    (((FullyCreatedConnectorInfo)sinkConnectorInfo).DataItem as INotifyPropertyChanged).PropertyChanged += new WeakEventHandler(ConnectorViewModel_PropertyChanged).Handler;
                 }
                 else
                 {

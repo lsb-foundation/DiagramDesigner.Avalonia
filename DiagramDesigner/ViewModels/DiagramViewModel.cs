@@ -10,7 +10,7 @@ namespace DiagramDesigner;
 
 public class DiagramViewModel : ViewModelBase, IDiagramViewModel, IRecipient<DoneDrawingMessage>
 {
-    private ObservableCollection<SelectableDesignerItemViewModelBase> items = new ObservableCollection<SelectableDesignerItemViewModelBase>();
+    private readonly ObservableCollection<SelectableDesignerItemViewModelBase> items = [];
 
     public DiagramViewModel()
     {
@@ -41,26 +41,18 @@ public class DiagramViewModel : ViewModelBase, IDiagramViewModel, IRecipient<Don
     public RelayCommand<object> ClearSelectedItemsCommand { get; private set; }
     public RelayCommand<object> CreateNewDiagramCommand { get; private set; }
 
-    public ObservableCollection<SelectableDesignerItemViewModelBase> Items
-    {
-        get { return items; }
-    }
+    public ObservableCollection<SelectableDesignerItemViewModelBase> Items => items;
 
-    public List<SelectableDesignerItemViewModelBase> SelectedItems
-    {
-        get { return Items.Where(x => x.IsSelected).ToList(); }
-    }
+    public List<SelectableDesignerItemViewModelBase> SelectedItems =>
+        [.. Items.Where(x => x.IsSelected)];
 
-    public SelectableDesignerItemViewModelBase SelectedItem
-    {
-        get { return SelectedItems.OrderByDescending(x => x.SelectedTime).FirstOrDefault(); }
-    }
+    public SelectableDesignerItemViewModelBase SelectedItem =>
+        SelectedItems.OrderByDescending(x => x.SelectedTime).FirstOrDefault();
 
     private void ExecuteAddItemCommand(object parameter)
     {
-        if (parameter is SelectableDesignerItemViewModelBase)
+        if (parameter is SelectableDesignerItemViewModelBase item)
         {
-            SelectableDesignerItemViewModelBase item = (SelectableDesignerItemViewModelBase)parameter;
             item.Parent = this;
             items.Add(item);
         }
@@ -68,9 +60,8 @@ public class DiagramViewModel : ViewModelBase, IDiagramViewModel, IRecipient<Don
 
     private void ExecuteRemoveItemCommand(object parameter)
     {
-        if (parameter is SelectableDesignerItemViewModelBase)
+        if (parameter is SelectableDesignerItemViewModelBase item)
         {
-            SelectableDesignerItemViewModelBase item = (SelectableDesignerItemViewModelBase)parameter;
             items.Remove(item);
         }
     }
@@ -128,7 +119,7 @@ public class DiagramViewModel : ViewModelBase, IDiagramViewModel, IRecipient<Don
     {
         if (e.PropertyName == "IsSelected")
         {
-            OnPropertyChanged("SelectedItem");
+            OnPropertyChanged(nameof(SelectedItem));
         }
     }
 }
