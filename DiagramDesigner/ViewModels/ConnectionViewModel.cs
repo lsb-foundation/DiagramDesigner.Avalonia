@@ -208,7 +208,8 @@ public class ConnectionViewModel : SelectableDesignerItemViewModelBase
 
     private void Init(FullyCreatedConnectorInfo sourceConnectorInfo, ConnectorInfoBase sinkConnectorInfo)
     {
-        PathFinder ??= new OrthogonalPathFinder();
+        //PathFinder ??= new OrthogonalPathFinder();
+        PathFinder ??= new SimplePathFinder();
         this.Parent = sourceConnectorInfo.DataItem.Parent;
         this.SourceConnectorInfo = sourceConnectorInfo;
         this.SinkConnectorInfo = sinkConnectorInfo;
