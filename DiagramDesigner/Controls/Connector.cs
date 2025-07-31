@@ -1,7 +1,5 @@
-﻿using Avalonia;
-using Avalonia.Controls.Primitives;
+﻿using Avalonia.Controls.Primitives;
 using Avalonia.Input;
-using Avalonia.VisualTree;
 
 namespace DiagramDesigner;
 
@@ -11,7 +9,7 @@ internal class Connector : TemplatedControl
     {
         base.OnPointerPressed(e);
 
-        var canvas = GetDesignerCanvas(this);
+        var canvas = VisualTreeHelper.GetParent<DesignerCanvas>(this);
         if (canvas != null)
         {
             canvas.SourceConnector = this;
@@ -21,11 +19,4 @@ internal class Connector : TemplatedControl
     }
 
     public ConnectorOrientation Orientation { get; set; }
-
-    private DesignerCanvas GetDesignerCanvas(Visual element)
-    {
-        while (element != null && element is not DesignerCanvas)
-            element = element.GetVisualParent();
-        return element as DesignerCanvas;
-    }
 }

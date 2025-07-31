@@ -139,7 +139,7 @@ internal class DesignerCanvas : Canvas
                     adornerLayer.Children.Clear();
                     // create rubberband adorner
                     var endPoint = e.GetPosition(this);
-                    var adorner = new RubberbandAdorner(this, rubberbandSelectionStartPoint, endPoint);
+                    var adorner = new RubberbandAdorner(this, rubberbandSelectionStartPoint.Value, endPoint);
                     adornerLayer.Children.Add(adorner);
                     AdornerLayer.SetAdornedElement(adorner, this);
                 }

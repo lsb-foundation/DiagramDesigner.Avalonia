@@ -3,18 +3,19 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
+using System;
 
 namespace DiagramDesigner;
 
 internal class RubberbandAdorner : Control
 {
-    private Point? startPoint;
-    private Point? endPoint;
+    private Point startPoint;
+    private Point endPoint;
     private Pen rubberbandPen;
 
     private DesignerCanvas designerCanvas;
 
-    public RubberbandAdorner(DesignerCanvas designerCanvas, Point? dragStartPoint, Point? dragEndPoint)
+    public RubberbandAdorner(DesignerCanvas designerCanvas, Point dragStartPoint, Point dragEndPoint)
     {
         this.designerCanvas = designerCanvas;
         this.startPoint = dragStartPoint;
@@ -27,44 +28,41 @@ internal class RubberbandAdorner : Control
     {
         base.Render(context);
 
-        if (this.startPoint.HasValue && this.endPoint.HasValue)
-            context.DrawRectangle(Brushes.Transparent, rubberbandPen, new Rect(this.startPoint.Value, this.endPoint.Value));
+        if (startPoint != default && endPoint != default)
+        {
+            // Create a rectangle that's always positive in size (normalized)
+            var rubberbandRect = new Rect(
+                Math.Min(startPoint.X, endPoint.X),
+                Math.Min(startPoint.Y, endPoint.Y),
+                Math.Abs(endPoint.X - startPoint.X),
+                Math.Abs(endPoint.Y - startPoint.Y));
 
-        UpdateSelection();
+            context.DrawRectangle(
+                Brushes.Transparent,
+                rubberbandPen,
+                rubberbandRect);
+
+            UpdateSelection(rubberbandRect);
+        }
     }
 
-    private static TVisual GetParent<TVisual>(Visual visual) where TVisual : Visual
-    {
-        var parent = visual.GetVisualParent();
-        if (parent is TVisual find) return find;
-        return GetParent<TVisual>(parent);
-    }
-
-    private void UpdateSelection()
+    private void UpdateSelection(Rect rubberBand)
     {
         IDiagramViewModel vm = (designerCanvas.DataContext as IDiagramViewModel);
-        Rect rubberBand = new Rect(startPoint.Value, endPoint.Value);
-        ItemsControl itemsControl = GetParent<ItemsControl>(designerCanvas);
+        ItemsControl itemsControl = VisualTreeHelper.GetParent<ItemsControl>(designerCanvas);
 
         foreach (SelectableDesignerItemViewModelBase item in vm.Items)
         {
-            if (item is SelectableDesignerItemViewModelBase)
+            if (item is not null)
             {
                 Visual container = itemsControl.ContainerFromItem(item);
 
                 Rect itemBounds = container.GetTransformedBounds().Value.Bounds;
-                Rect itemRect = new Rect(item.Left, item.Top, itemBounds.Width, itemBounds.Height);
+                Rect itemRect = new(item.Left, item.Top, itemBounds.Width, itemBounds.Height);
 
                 if (rubberBand.Contains(itemRect))
                 {
                     Dispatcher.UIThread.Post(() => item.IsSelected = true);
-                }
-                else
-                {
-                    //if (!(Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)))
-                    //{
-                    //    item.IsSelected = false;
-                    //}
                 }
             }
         }

@@ -4,9 +4,10 @@
 
 	<ControlTheme x:Key="{x:Type s:Connector}" TargetType="s:Connector">
 		<Setter Property="Template">
-			<ControlTemplate>
+			<ControlTemplate x:DataType="s:FullyCreatedConnectorInfo">
 				<s:DesignerItemPanel Width="{x:Static s:ConnectorInfoBase.ConnectorWidth}"
 									 Height="{x:Static s:ConnectorInfoBase.ConnectorHeight}"
+									 ToolTip.Tip="{Binding Type}"
 									 Cursor="Cross">
 					<!--transparent extra space makes connector easier to hit-->
 					<Ellipse Name="outter"
@@ -63,8 +64,7 @@
 							 Height="{Binding ItemHeight}"
 							 s:SelectionProps.EnableForSelection="True">
 			<s:DragThumb x:Name="PART_DragThumb"
-						 Cursor="SizeAll"
-						 Margin="-3"/>
+						 Cursor="SizeAll"/>
 			<Panel>
 				<s:ResizeDecorator x:Name="PART_ResizeDecorator"
 								   IsVisible="{Binding IsSelected}"/>
@@ -98,7 +98,8 @@
 					  StrokeThickness="{Binding LineWidth}"/>
 			<Canvas.Styles>
 				<Style Selector="Polyline">
-					<Setter Property="Stroke" Value="{Binding LineColor, Converter={x:Static s:ColorBrushConverter.Instance}}"/>
+					<Setter Property="Stroke"
+							Value="{Binding LineColor, Converter={x:Static s:ColorBrushConverter.Instance}}"/>
 				</Style>
 				<Style Selector="Polyline.selected">
 					<Setter Property="Stroke" Value="Black"/>

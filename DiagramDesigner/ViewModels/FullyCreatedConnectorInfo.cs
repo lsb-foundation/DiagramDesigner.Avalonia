@@ -47,6 +47,7 @@ public class FullyCreatedConnectorInfo : ConnectorInfoBase
 
     public double GetXRatio()
     {
+        if (XRatio != 0) return XRatio;
         return Orientation switch
         {
             ConnectorOrientation.Left => 0,
@@ -59,6 +60,7 @@ public class FullyCreatedConnectorInfo : ConnectorInfoBase
 
     public double GetYRatio()
     {
+        if (YRatio != 0) return YRatio;
         return Orientation switch
         {
             ConnectorOrientation.Left => 0.5,

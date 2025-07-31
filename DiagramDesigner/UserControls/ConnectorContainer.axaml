@@ -4,9 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:s="using:DiagramDesigner"
 			 mc:Ignorable="d"
-             x:Class="DiagramDesigner.ConnectorContainer">
+             x:Class="DiagramDesigner.ConnectorContainer"
+			 ClipToBounds="False">
 	
-	<ItemsControl ItemsSource="{Binding $parent.Connectors}">
+	<ItemsControl ItemsSource="{Binding $parent.Connectors}" ClipToBounds="False">
 		
 		<ItemsControl.Styles>
 			<Style Selector="ContentPresenter" x:DataType="s:FullyCreatedConnectorInfo">

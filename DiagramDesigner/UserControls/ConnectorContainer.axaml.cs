@@ -47,25 +47,8 @@ public partial class ConnectorContainer : UserControl
         {
             if (connector.DataContext is FullyCreatedConnectorInfo vm)
             {
-                switch (vm.GetOrientation())
-                {
-                    case ConnectorOrientation.Left:
-                        Canvas.SetLeft(connector, 0);
-                        Canvas.SetTop(connector, vm.DataItem.ItemHeight * vm.GetYRatio() - ConnectorInfoBase.ConnectorHeight / 2);
-                        break;
-                    case ConnectorOrientation.Top:
-                        Canvas.SetLeft(connector, vm.DataItem.ItemWidth * vm.GetXRatio() - ConnectorInfoBase.ConnectorWidth / 2);
-                        Canvas.SetTop(connector, 0);
-                        break;
-                    case ConnectorOrientation.Right:
-                        Canvas.SetLeft(connector, vm.DataItem.ItemWidth - ConnectorInfoBase.ConnectorWidth);
-                        Canvas.SetTop(connector, vm.DataItem.ItemHeight * vm.GetYRatio() - ConnectorInfoBase.ConnectorHeight / 2);
-                        break;
-                    case ConnectorOrientation.Bottom:
-                        Canvas.SetLeft(connector, vm.DataItem.ItemWidth * vm.GetXRatio() - ConnectorInfoBase.ConnectorWidth / 2);
-                        Canvas.SetTop(connector, vm.DataItem.ItemHeight - ConnectorInfoBase.ConnectorHeight);
-                        break;
-                }
+                Canvas.SetLeft(connector, vm.DataItem.ItemWidth * vm.GetXRatio() - ConnectorInfoBase.ConnectorWidth / 2);
+                Canvas.SetTop(connector, vm.DataItem.ItemHeight * vm.GetYRatio() - ConnectorInfoBase.ConnectorHeight / 2);
             }
         }
         IsReady = true;

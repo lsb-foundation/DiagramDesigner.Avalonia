@@ -33,7 +33,7 @@ public class OrthogonalPathFinder : IPathFinder
             {
                 #region source node
 
-                if (IsPointVisible(currentPoint, endPoint, new Rect[] { rectSource, rectSink }))
+                if (IsPointVisible(currentPoint, endPoint, [rectSource, rectSink]))
                 {
                     linePoints.Add(endPoint);
                     currentPoint = endPoint;
@@ -56,7 +56,7 @@ public class OrthogonalPathFinder : IPathFinder
                     linePoints.Add(n);
                     currentPoint = n;
 
-                    if (!IsRectVisible(currentPoint, rectSink, new Rect[] { rectSource }))
+                    if (!IsRectVisible(currentPoint, rectSink, [rectSource]))
                     {
                         Point n1, n2;
                         GetOppositeCorners(source.Orientation, rectSource, out n1, out n2);
@@ -70,7 +70,7 @@ public class OrthogonalPathFinder : IPathFinder
                             linePoints.Add(n2);
                             currentPoint = n2;
                         }
-                        if (!IsRectVisible(currentPoint, rectSink, new Rect[] { rectSource }))
+                        if (!IsRectVisible(currentPoint, rectSink, [rectSource]))
                         {
                             if (flag)
                             {
@@ -96,8 +96,8 @@ public class OrthogonalPathFinder : IPathFinder
                     GetNeighborCorners(sink.Orientation, rectSink, out s1, out s2);
                     GetOppositeCorners(sink.Orientation, rectSink, out n1, out n2);
 
-                    bool n1Visible = IsPointVisible(currentPoint, n1, new Rect[] { rectSource, rectSink });
-                    bool n2Visible = IsPointVisible(currentPoint, n2, new Rect[] { rectSource, rectSink });
+                    bool n1Visible = IsPointVisible(currentPoint, n1, [rectSource, rectSink]);
+                    bool n2Visible = IsPointVisible(currentPoint, n2, [rectSource, rectSink]);
 
                     if (n1Visible && n2Visible)
                     {
@@ -199,7 +199,7 @@ public class OrthogonalPathFinder : IPathFinder
             linePoints.Add(endPoint);
         }
 
-        linePoints = OptimizeLinePoints(linePoints, new Rect[] { rectSource, rectSink }, source.Orientation, sink.Orientation);
+        linePoints = OptimizeLinePoints(linePoints, [rectSource, rectSink], source.Orientation, sink.Orientation);
 
         CheckPathEnd(source, sink, showLastLine, linePoints);
         return linePoints;
@@ -219,7 +219,7 @@ public class OrthogonalPathFinder : IPathFinder
         {
             while (true)
             {
-                if (IsPointVisible(currentPoint, endPoint, new Rect[] { rectSource }))
+                if (IsPointVisible(currentPoint, endPoint, [rectSource]))
                 {
                     linePoints.Add(endPoint);
                     break;
@@ -230,7 +230,7 @@ public class OrthogonalPathFinder : IPathFinder
                 linePoints.Add(n);
                 currentPoint = n;
 
-                if (IsPointVisible(currentPoint, endPoint, new Rect[] { rectSource }))
+                if (IsPointVisible(currentPoint, endPoint, [rectSource]))
                 {
                     linePoints.Add(endPoint);
                     break;
@@ -255,16 +255,16 @@ public class OrthogonalPathFinder : IPathFinder
         }
 
         if (preferredOrientation != ConnectorOrientation.None)
-            linePoints = OptimizeLinePoints(linePoints, new Rect[] { rectSource }, source.Orientation, preferredOrientation);
+            linePoints = OptimizeLinePoints(linePoints, [rectSource], source.Orientation, preferredOrientation);
         else
-            linePoints = OptimizeLinePoints(linePoints, new Rect[] { rectSource }, source.Orientation, GetOpositeOrientation(source.Orientation));
+            linePoints = OptimizeLinePoints(linePoints, [rectSource], source.Orientation, GetOpositeOrientation(source.Orientation));
 
         return linePoints;
     }
 
     private static List<Point> OptimizeLinePoints(List<Point> linePoints, Rect[] rectangles, ConnectorOrientation sourceOrientation, ConnectorOrientation sinkOrientation)
     {
-        List<Point> points = new List<Point>();
+        List<Point> points = [];
         int cut = 0;
 
         for (int i = 0; i < linePoints.Count; i++)
@@ -416,8 +416,8 @@ public class OrthogonalPathFinder : IPathFinder
         Point s1, s2; // neighbors on sink side
         GetNeighborCorners(sink.Orientation, rectSink, out s1, out s2);
 
-        bool flag1 = IsPointVisible(currentPoint, s1, new Rect[] { rectSource, rectSink });
-        bool flag2 = IsPointVisible(currentPoint, s2, new Rect[] { rectSource, rectSink });
+        bool flag1 = IsPointVisible(currentPoint, s1, [rectSource, rectSink]);
+        bool flag2 = IsPointVisible(currentPoint, s2, [rectSource, rectSink]);
 
         if (flag1) // s1 visible
         {
