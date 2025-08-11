@@ -83,27 +83,8 @@ internal class DiagramViewModelSerializer
         diagramViewModel.Option.Height = Height;
 
         InitializeComponents(diagramViewModel);
+        InitializeConnections(diagramViewModel);
         InitializeInterlocks(diagramViewModel);
-
-        IEnumerable<FullyCreatedConnectorInfo> connectors =
-            diagramViewModel.Items.OfType<ComponentBase>()
-            .SelectMany(c => c.Connectors);
-
-        foreach (var connectionSerializer in Connections)
-        {
-            var sourceConnector = connectors.FirstOrDefault(c => c.SerializerIdentity == connectionSerializer.SourceConnectorId);
-            var sinkConnector = connectors.FirstOrDefault(c => c.SerializerIdentity == connectionSerializer.SinkConnectorId);
-
-            if (sourceConnector != null && sinkConnector != null)
-            {
-                var connectionViewModel = new ConnectionViewModel(sourceConnector, sinkConnector)
-                {
-                    LineWidth = connectionSerializer.LineWidth,
-                    Parent = diagramViewModel
-                };
-                diagramViewModel.Items.Add(connectionViewModel);
-            }
-        }
 
         return diagramViewModel;
     }
@@ -129,6 +110,29 @@ internal class DiagramViewModelSerializer
 
             component.Parent = diagramViewModel;
             diagramViewModel.Items.Add(component);
+        }
+    }
+
+    private void InitializeConnections(IDiagramViewModel diagramViewModel)
+    {
+        IEnumerable<FullyCreatedConnectorInfo> connectors =
+            diagramViewModel.Items.OfType<ComponentBase>()
+            .SelectMany(c => c.Connectors);
+
+        foreach (var connectionSerializer in Connections)
+        {
+            var sourceConnector = connectors.FirstOrDefault(c => c.SerializerIdentity == connectionSerializer.SourceConnectorId);
+            var sinkConnector = connectors.FirstOrDefault(c => c.SerializerIdentity == connectionSerializer.SinkConnectorId);
+
+            if (sourceConnector != null && sinkConnector != null)
+            {
+                var connectionViewModel = new ConnectionViewModel(sourceConnector, sinkConnector)
+                {
+                    LineWidth = connectionSerializer.LineWidth,
+                    Parent = diagramViewModel
+                };
+                diagramViewModel.Items.Add(connectionViewModel);
+            }
         }
     }
 
