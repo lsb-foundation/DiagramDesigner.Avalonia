@@ -14,6 +14,8 @@ public class OrthogonalPathFinder : IPathFinder
 {
     private const int margin = 2;
 
+    public ConnectionViewModel Connection { get; set; }
+
     public List<Point> GetConnectionLine(ConnectorInfo source, ConnectorInfo sink, bool showLastLine)
     {
         List<Point> linePoints = new List<Point>();

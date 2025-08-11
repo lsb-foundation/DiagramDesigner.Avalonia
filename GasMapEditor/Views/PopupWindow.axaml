@@ -1,0 +1,63 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:m="using:GasMapEditor.Models"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="GasMapEditor.PopupWindow"
+		x:DataType="m:PopupDataContainer"
+        Title="{Binding Title}"
+		Height="{Binding Height}"
+		Width="{Binding Width}">
+	
+	<Window.DataTemplates>
+
+		<DataTemplate DataType="m:MFCData">
+			<Grid RowDefinitions="Auto,Auto"
+				  ColumnDefinitions="Auto,*"
+				  Margin="8"
+				  HorizontalAlignment="Center"
+				  VerticalAlignment="Center">
+				<TextBlock Text="Unit"/>
+				<ComboBox Grid.Row="0"
+						  Grid.Column="1"
+						  Margin="5,0"
+						  ItemsSource="{Binding FlowUnits}"
+						  SelectedItem="{Binding Unit}"/>
+				<TextBlock Grid.Row="1"
+						   Margin="0,5"
+						   Text="Flow"/>
+				<TextBox Grid.Row="1"
+						 Grid.Column="1"
+						 Margin="5"
+						 Text="{Binding Flow, UpdateSourceTrigger=PropertyChanged}"/>
+			</Grid>
+		</DataTemplate>
+		
+	</Window.DataTemplates>
+
+	<Grid RowDefinitions="*,Auto">
+		<ContentControl Grid.Row="0"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Content="{Binding Data}" />
+		
+		<StackPanel Grid.Row="1"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+			<Button Content="Ok"
+                    IsDefault="True"
+                    Click="Ok_Click"
+                    Margin="5"
+                    Width="100"
+                    Height="30" />
+			<Button Content="Cancel"
+					IsCancel="True"
+					Click="Cancel_Click"
+                    Margin="5"
+                    Width="100"
+                    Height="30" />
+		</StackPanel>
+	</Grid>
+	
+</Window>

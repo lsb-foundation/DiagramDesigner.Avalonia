@@ -171,6 +171,7 @@ public class ConnectionViewModel : SelectableDesignerItemViewModelBase
               SourceA.Y,
               SourceA);
 
+        PathFinder.Connection = this;
         if (IsFullConnection)
         {
             ConnectorInfo sinkInfo = ConnectorInfo(
@@ -208,8 +209,7 @@ public class ConnectionViewModel : SelectableDesignerItemViewModelBase
 
     private void Init(FullyCreatedConnectorInfo sourceConnectorInfo, ConnectorInfoBase sinkConnectorInfo)
     {
-        //PathFinder ??= new OrthogonalPathFinder();
-        PathFinder ??= new SimplePathFinder();
+        PathFinder ??= new OrthogonalPathFinder();
         this.Parent = sourceConnectorInfo.DataItem.Parent;
         this.SourceConnectorInfo = sourceConnectorInfo;
         this.SinkConnectorInfo = sinkConnectorInfo;

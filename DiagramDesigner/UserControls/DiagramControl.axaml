@@ -16,22 +16,31 @@
 		
 	</UserControl.Resources>
 
-	<ItemsControl ItemsSource="{Binding Items}"
-				  ItemTemplate="{StaticResource designerItemTemplateSelector}">
-		<ItemsControl.ItemsPanel>
-			<ItemsPanelTemplate>
-				<s:DesignerCanvas Background="Transparent"/>
-			</ItemsPanelTemplate>
-		</ItemsControl.ItemsPanel>
+	<LayoutTransformControl>
+		<ItemsControl ItemsSource="{Binding Items}"
+					  ItemTemplate="{StaticResource designerItemTemplateSelector}">
+			<ItemsControl.ItemsPanel>
+				<ItemsPanelTemplate>
+					<s:DesignerCanvas Background="White"
+									  Width="{Binding Option.Width}"
+									  Height="{Binding Option.Height}">
+					</s:DesignerCanvas>
+				</ItemsPanelTemplate>
+			</ItemsControl.ItemsPanel>
 
-		<ItemsControl.Styles>
-			<Style Selector="ContentPresenter" x:DataType="s:SelectableDesignerItemViewModelBase">
-				<Setter Property="Canvas.Left" Value="{Binding Left}"/>
-				<Setter Property="Canvas.Top" Value="{Binding Top}"/>
-				<Setter Property="ZIndex" Value="{Binding ZIndex}"/>
-				<Setter Property="ClipToBounds" Value="False"/>
-			</Style>
-		</ItemsControl.Styles>
-	</ItemsControl>
-	
+			<ItemsControl.Styles>
+				<Style Selector="ContentPresenter" x:DataType="s:SelectableDesignerItemViewModelBase">
+					<Setter Property="Canvas.Left" Value="{Binding Left}"/>
+					<Setter Property="Canvas.Top" Value="{Binding Top}"/>
+					<Setter Property="ZIndex" Value="{Binding ZIndex}"/>
+					<Setter Property="ClipToBounds" Value="False"/>
+				</Style>
+			</ItemsControl.Styles>
+		</ItemsControl>
+		
+		<LayoutTransformControl.LayoutTransform>
+			<ScaleTransform ScaleX="{Binding Option.ZoomValue}" ScaleY="{Binding Option.ZoomValue}"/>
+		</LayoutTransformControl.LayoutTransform>
+	</LayoutTransformControl>
+
 </UserControl>

@@ -1,0 +1,76 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:local="using:GasMapEditor"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="GasMapEditor.PropertyGrid">
+	
+	<UserControl.Resources>
+		<ControlTemplate x:Key="Number"
+						 TargetType="ContentControl"
+						 x:DataType="local:PropertyViewModel">
+			<NumericUpDown Value="{Binding Value}"/>
+		</ControlTemplate>
+		<ControlTemplate x:Key="Text"
+						 TargetType="ContentControl"
+						 x:DataType="local:PropertyViewModel">
+			<TextBox Text="{Binding Value}"/>
+		</ControlTemplate>
+		<ControlTemplate x:Key="CheckBox"
+						 TargetType="ContentControl"
+						 x:DataType="local:PropertyViewModel">
+			<CheckBox IsChecked="{Binding Value}"/>
+		</ControlTemplate>
+		<ControlTemplate x:Key="Color"
+						 TargetType="ContentControl"
+						 x:DataType="local:PropertyViewModel">
+			<ColorPicker Color="{Binding Value}" 
+						 HorizontalAlignment="Left"/>
+		</ControlTemplate>
+	</UserControl.Resources>
+
+	<UserControl.Styles>
+		<Style Selector="StackPanel[Tag=Number] ContentControl">
+			<Setter Property="Template" Value="{StaticResource Number}"/>
+		</Style>
+		<Style Selector="StackPanel[Tag=Text] ContentControl">
+			<Setter Property="Template" Value="{StaticResource Text}"/>
+		</Style>
+		<Style Selector="StackPanel[Tag=CheckBox] ContentControl">
+			<Setter Property="Template" Value="{StaticResource CheckBox}"/>
+		</Style>
+		<Style Selector="StackPanel[Tag=Color] ContentControl">
+			<Setter Property="Template" Value="{StaticResource Color}"/>
+		</Style>
+	</UserControl.Styles>
+
+	<UserControl.DataTemplates>
+		<DataTemplate DataType="local:PropertyViewModel">
+			<StackPanel Orientation="Horizontal"
+						Margin="5,2"
+						Tag="{Binding Type}">
+				<TextBlock Text="{Binding DisplayName, Mode=OneWay}"
+						   VerticalAlignment="Center"
+						   FontSize="12"
+						   Width="75"/>
+				<ContentControl Width="120"/>
+			</StackPanel>
+		</DataTemplate>
+	</UserControl.DataTemplates>
+
+	<Border Background="#7fc2def9"
+			BorderBrush="{StaticResource ToolbarBorderBrush}"
+			BorderThickness="1"
+			CornerRadius="5">
+		<ItemsControl Margin="8"
+					  ItemsSource="{Binding $parent[local:PropertyGrid].Properties}">
+			<ItemsControl.ItemsPanel>
+				<ItemsPanelTemplate>
+					<StackPanel />
+				</ItemsPanelTemplate>
+			</ItemsControl.ItemsPanel>
+		</ItemsControl>
+	</Border>
+	
+</UserControl>

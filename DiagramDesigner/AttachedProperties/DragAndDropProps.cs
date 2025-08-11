@@ -5,7 +5,7 @@ using DiagramDesigner.Helpers;
 
 namespace DiagramDesigner;
 
-public class DragAndDropProps     : AvaloniaObject 
+public class DragAndDropProps : AvaloniaObject 
 {
     #region EnabledForDrag
 

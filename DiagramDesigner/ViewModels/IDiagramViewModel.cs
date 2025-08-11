@@ -6,6 +6,7 @@ namespace DiagramDesigner;
 
 public interface IDiagramViewModel
 {
+    DiagramOption Option { get; }
     RelayCommand<object> AddItemCommand { get; }
     RelayCommand<object> RemoveItemCommand { get;  }
     RelayCommand<object> ClearSelectedItemsCommand { get;  }
@@ -15,4 +16,5 @@ public interface IDiagramViewModel
 
     void Add(SelectableDesignerItemViewModelBase item);
     void Remove(SelectableDesignerItemViewModelBase item);
+    void RemoveSelectedItems();
 }

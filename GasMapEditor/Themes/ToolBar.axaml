@@ -1,0 +1,90 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:local="using:GasMapEditor">
+
+	<SolidColorBrush x:Key="WindowBackgroundBrush" Color="#deedfa"/>
+	
+	<!-- Toolbar Brushes -->
+	<SolidColorBrush x:Key="ToolbarBorderBrush" Color="#ffc5d2df"/>
+	<SolidColorBrush x:Key="ToolbarDarkBorderBrush" Color="#ffc1d9f1"/>
+	<SolidColorBrush x:Key="ToolbarTextBrush" Color="#ff15428b"/>
+	<SolidColorBrush x:Key="ToolbarGroupHeaderBrush" Color="#200077EF"/>
+
+	<LinearGradientBrush x:Key="ToolbarSelectedBackgroundBrush" StartPoint="0,0" EndPoint="0,1">
+		<GradientBrush.GradientStops>
+			<GradientStop Color="#FFFEE3" Offset="0.0"/>
+			<GradientStop Color="#FFE797" Offset="0.4"/>
+			<GradientStop Color="#FFD750" Offset="0.4"/>
+			<GradientStop Color="#FFE796" Offset="1.0"/>
+		</GradientBrush.GradientStops>
+	</LinearGradientBrush>
+
+	<LinearGradientBrush x:Key="ToolbarPressedBrush" StartPoint="0,0" EndPoint="0,1">
+		<GradientBrush.GradientStops>
+			<GradientStop Color="#FED8AA" Offset="0.0"/>
+			<GradientStop Color="#FBB565" Offset="0.4"/>
+			<GradientStop Color="#FA9D34" Offset="0.4"/>
+			<GradientStop Color="#FDEEAA" Offset="1.0"/>
+		</GradientBrush.GradientStops>
+	</LinearGradientBrush>
+
+	<LinearGradientBrush x:Key="PressedBorderBrush" StartPoint="0,0" EndPoint="0,1">
+		<GradientBrush.GradientStops>
+			<GradientStop Color="#444" Offset="0.0"/>
+			<GradientStop Color="#888" Offset="1.0"/>
+		</GradientBrush.GradientStops>
+	</LinearGradientBrush>
+
+	<LinearGradientBrush x:Key="PressedBrush" StartPoint="0,0" EndPoint="0,1">
+		<GradientBrush.GradientStops>
+			<GradientStop Color="#BBB" Offset="0.0"/>
+			<GradientStop Color="#EEE" Offset="0.1"/>
+			<GradientStop Color="#EEE" Offset="0.9"/>
+			<GradientStop Color="#FFF" Offset="1.0"/>
+		</GradientBrush.GradientStops>
+	</LinearGradientBrush>
+
+	<SolidColorBrush x:Key="DisabledForegroundBrush" Color="#888" />
+
+	<SolidColorBrush x:Key="DisabledBackgroundBrush" Color="#EEE" />
+
+	<SolidColorBrush x:Key="SelectedBackgroundBrush" Color="#DDD" />
+
+	<SolidColorBrush x:Key="DisabledBorderBrush" Color="#AAA" />
+
+	<SolidColorBrush x:Key="SolidBorderBrush" Color="#888" />
+
+	<ControlTheme x:Key="ToolBarGroup" TargetType="HeaderedContentControl">
+		<Setter Property="Foreground" Value="{StaticResource ToolbarTextBrush}"/>
+		<Setter Property="Template">
+			<ControlTemplate TargetType="HeaderedContentControl">
+				<Grid RowDefinitions="*,Auto">
+					<Rectangle Stroke="GhostWhite"
+							   StrokeThickness="1"
+							   Margin="1,1,-1,0"
+							   RadiusX="3"
+							   RadiusY="3"
+							   Grid.RowSpan="2"/>
+					<Border Grid.Row="0"
+							BorderBrush="{StaticResource ToolbarBorderBrush}"
+							BorderThickness="1,1,1,0"
+							CornerRadius="3,3,0,0">
+						<ContentPresenter Margin="4"
+										  Content="{TemplateBinding Content}"/>
+					</Border>
+					<Border Grid.Row="1"
+							Background="{StaticResource ToolbarGroupHeaderBrush}"
+							BorderBrush="{StaticResource ToolbarBorderBrush}"
+							BorderThickness="1,0,1,1"
+							CornerRadius="0,0,3,3">
+						<ContentPresenter HorizontalAlignment="Center"
+										  Margin="4"
+										  RecognizesAccessKey="True"
+										  Content="{TemplateBinding Header}"/>
+					</Border>
+				</Grid>
+			</ControlTemplate>
+		</Setter>
+	</ControlTheme>
+	
+</ResourceDictionary>

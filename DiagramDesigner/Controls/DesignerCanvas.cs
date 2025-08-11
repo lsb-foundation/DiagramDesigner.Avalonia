@@ -148,6 +148,19 @@ internal class DesignerCanvas : Canvas
         e.Handled = true;
     }
 
+    protected override void OnPointerWheelChanged(PointerWheelEventArgs e)
+    {
+        base.OnPointerWheelChanged(e);
+
+        if (e.KeyModifiers == KeyModifiers.Control)
+        {
+            var diagram = DataContext as IDiagramViewModel;
+            var zoom = diagram.Option.ZoomValue + (e.Delta.Y > 0 ? 0.1 : -0.1);
+            diagram.Option.ZoomValue = Math.Max(Math.Min(zoom, diagram.Option.ZoomValueMax), diagram.Option.ZoomValueMin);
+            e.Handled = true;
+        }
+    }
+
     protected override Size MeasureOverride(Size constraint)
     {
         double width = 0, height = 0;

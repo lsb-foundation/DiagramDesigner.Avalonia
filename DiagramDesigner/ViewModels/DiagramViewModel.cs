@@ -14,6 +14,7 @@ public class DiagramViewModel : ViewModelBase, IDiagramViewModel, IRecipient<Don
 
     public DiagramViewModel()
     {
+        Option = new DiagramOption();
         AddItemCommand = new RelayCommand<object>(ExecuteAddItemCommand);
         RemoveItemCommand = new RelayCommand<object>(ExecuteRemoveItemCommand);
         ClearSelectedItemsCommand = new RelayCommand<object>(ExecuteClearSelectedItemsCommand);
@@ -21,11 +22,9 @@ public class DiagramViewModel : ViewModelBase, IDiagramViewModel, IRecipient<Don
 
         items.CollectionChanged += Items_CollectionChanged;
 
-        //Mediator.Instance.Register(this);
-        WeakReferenceMessenger.Default.Register<DoneDrawingMessage>(this);
+        WeakReferenceMessenger.Default.Register(this);
     }
 
-    //[MediatorMessageSink("DoneDrawingMessage")]
     private void OnDoneDrawingMessage()
     {
         foreach (var item in Items.OfType<DesignerItemViewModelBase>())
@@ -36,6 +35,7 @@ public class DiagramViewModel : ViewModelBase, IDiagramViewModel, IRecipient<Don
 
     void IRecipient<DoneDrawingMessage>.Receive(DoneDrawingMessage message) => OnDoneDrawingMessage();
 
+    public DiagramOption Option { get; }
     public RelayCommand<object> AddItemCommand { get; private set; }
     public RelayCommand<object> RemoveItemCommand { get; private set; }
     public RelayCommand<object> ClearSelectedItemsCommand { get; private set; }
@@ -55,6 +55,7 @@ public class DiagramViewModel : ViewModelBase, IDiagramViewModel, IRecipient<Don
         {
             item.Parent = this;
             items.Add(item);
+            item.OnAddedToDiagram();
         }
     }
 
@@ -63,6 +64,7 @@ public class DiagramViewModel : ViewModelBase, IDiagramViewModel, IRecipient<Don
         if (parameter is SelectableDesignerItemViewModelBase item)
         {
             items.Remove(item);
+            item.OnRemoveFromDiagram();
         }
     }
 
@@ -85,6 +87,7 @@ public class DiagramViewModel : ViewModelBase, IDiagramViewModel, IRecipient<Don
         {
             item.Parent = this;
             items.Add(item);
+            item.OnAddedToDiagram();
         }
     }
 
@@ -93,6 +96,16 @@ public class DiagramViewModel : ViewModelBase, IDiagramViewModel, IRecipient<Don
         if (item != null && items.Contains(item))
         {
             items.Remove(item);
+            item.OnRemoveFromDiagram();
+        }
+    }
+
+    public void RemoveSelectedItems()
+    {
+        foreach (var item in SelectedItems)
+        {
+            items.Remove(item);
+            item.OnRemoveFromDiagram();
         }
     }
 

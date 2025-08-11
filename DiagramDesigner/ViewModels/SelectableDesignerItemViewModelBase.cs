@@ -90,4 +90,8 @@ public abstract class SelectableDesignerItemViewModelBase : ViewModelBase, ISele
     {
         SelectItemCommand = new RelayCommand<object>(ExecuteSelectItemCommand);
     }
+
+    public virtual void OnAddedToDiagram() { }
+
+    public virtual void OnRemoveFromDiagram() { }
 }

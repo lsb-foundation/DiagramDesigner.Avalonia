@@ -73,6 +73,9 @@
 								  Content="{Binding $parent[ContentPresenter].Content}"/>
 				<s:ConnectorContainer x:Name="PART_ConnectorDecorator"
 									  Connectors="{Binding Connectors}"/>
+				<Panel.RenderTransform>
+					<RotateTransform Angle="{Binding Angle}"/>
+				</Panel.RenderTransform>
 			</Panel>
 			
 			<Panel.Styles>

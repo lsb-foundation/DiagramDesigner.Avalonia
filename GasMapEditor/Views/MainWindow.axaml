@@ -1,0 +1,212 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:GasMapEditor.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:c="using:GasMapEditor.Components"
+		xmlns:m="using:GasMapEditor.Models"
+		xmlns:s="avalonia.diagram.designer"
+		xmlns:local="using:GasMapEditor"
+		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+		Width="960" Height="600"
+        x:Class="GasMapEditor.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="GasMapEditor">
+
+	<Window.Styles>
+		<Style Selector="TextBlock#messageText.error">
+			<Setter Property="Foreground" Value="Red"/>
+		</Style>
+	</Window.Styles>
+
+	<Grid RowDefinitions="Auto,*,Auto"
+		  Background="#deedfa">
+		<StackPanel Orientation="Horizontal"
+					Height="100">
+			<HeaderedContentControl Theme="{StaticResource ToolBarGroup}"
+									Header="文件" FontSize="12"
+									Margin="3,3,1.5,3">
+				<StackPanel Orientation="Horizontal">
+					<local:ImageIconButton Margin="3" Width="40"
+										   IconSource="/Assets/file-open.png"
+										   Command="{Binding OpenFileCommand}"
+										   Text="打开"/>
+					<local:ImageIconButton Margin="3" Width="40"
+										   IconSource="/Assets/preview.png"
+										   Command="{Binding PreviewCommand}"
+										   Text="预览"/>
+					<local:ImageIconButton Margin="3" Width="40"
+										   IconSource="/Assets/file-save.png"
+										   Command="{Binding SaveCommand}"
+										   Text="保存"/>
+				</StackPanel>
+			</HeaderedContentControl>
+			<HeaderedContentControl Theme="{StaticResource ToolBarGroup}"
+									Header="Interlock" FontSize="12"
+									Margin="3,3,1.5,3">
+				<StackPanel Orientation="Horizontal">
+					<local:ImageIconButton Margin="3" Width="40"
+										   IconSource="/Assets/view.png"
+										   Command="{Binding ViewInterlockCommand}"
+										   Text="查看"/>
+					<local:ImageIconButton Margin="3" Width="40"
+										   IconSource="/Assets/lock.png"
+										   Command="{Binding SetInterlockCommand}"
+										   Text="设置"/>
+					<local:ImageIconButton Margin="3" Width="40"
+										   IconSource="/Assets/unlock.png"
+										   Command="{Binding ReleaseInterlockCommand}"
+										   Text="取消"/>
+				</StackPanel>
+			</HeaderedContentControl>
+			<HeaderedContentControl Theme="{StaticResource ToolBarGroup}"
+									Header="操作" FontSize="12"
+									Margin="3,3,1.5,3">
+				<StackPanel Orientation="Horizontal">
+					<local:ImageIconButton Margin="3" Width="40"
+										   IconSource="/Assets/clear.png"
+										   Command="{Binding ClearMapCommand}"
+										   Text="清空"/>
+					<local:ImageIconButton Margin="3" Width="40"
+										   IconSource="/Assets/delete_x.png"
+										   Command="{Binding DeleteCommand}"
+										   Text="删除"/>
+					<local:ImageIconButton Margin="3" Width="40"
+										   IconSource="/Assets/rotate-right.png"
+										   Command="{Binding RotateCommand}"
+										   Text="旋转"/>
+				</StackPanel>
+			</HeaderedContentControl>
+			<HeaderedContentControl Theme="{StaticResource ToolBarGroup}"
+									Header="线条宽度" FontSize="12"
+									Margin="3,3,1.5,3">
+				<StackPanel Orientation="Horizontal">
+					<local:ImageIconButton Margin="3" Width="40"
+										   IconSource="/Assets/width-minus.png"
+										   Command="{Binding AdjustLineWidthCommand}"
+										   CommandParameter="{x:False}"
+										   Text="减小"/>
+					<local:ImageIconButton Margin="3" Width="40"
+										   IconSource="/Assets/width-add.png"
+										   Command="{Binding AdjustLineWidthCommand}"
+										   CommandParameter="{x:True}"
+										   Text="增加"/>
+				</StackPanel>
+			</HeaderedContentControl>
+			<HeaderedContentControl Theme="{StaticResource ToolBarGroup}"
+									Header="组件" FontSize="12"
+									Margin="3,3,1.5,3">
+				<ItemsControl ItemsSource="{Binding ToolboxDatas}">
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<UniformGrid Columns="6"/>
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+					<ItemsControl.ItemTemplate>
+						<DataTemplate DataType="s:ToolBoxData">
+							<Panel Cursor="SizeAll"
+								   ToolTip.Tip="拖动添加组件"
+								   Margin="3"
+								   s:DragAndDropProps.EnableForDrag="True">
+								<Rectangle Width="55" Height="25"
+										   RadiusX="3" RadiusY="3"
+										   StrokeThickness="1"
+										   StrokeDashArray="2"
+										   Fill="Transparent"/>
+								<TextBlock HorizontalAlignment="Center"
+										   VerticalAlignment="Center"
+										   Text="{Binding Text}"
+										   FontSize="12"/>
+								<Panel.Styles>
+									<Style Selector="Rectangle">
+										<Setter Property="Stroke" Value="Gray"/>
+									</Style>
+									<Style Selector="Panel:pointerover Rectangle">
+										<Setter Property="Stroke" Value="{StaticResource ToolbarTextBrush}"/>
+									</Style>
+								</Panel.Styles>
+							</Panel>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+			</HeaderedContentControl>
+			<HeaderedContentControl Theme="{StaticResource ToolBarGroup}"
+									Header="调整画布" FontSize="12"
+									Margin="3,3,1.5,3">
+				<StackPanel Orientation="Vertical" VerticalAlignment="Center">
+					<StackPanel Orientation="Horizontal">
+						<TextBlock VerticalAlignment="Center" Text="宽度"/>
+						<NumericUpDown Margin="5,3"
+									   Width="120"
+									   Increment="50"
+									   Value="{Binding DiagramViewModel.Option.Width}"/>
+					</StackPanel>
+					<StackPanel Orientation="Horizontal">
+						<TextBlock VerticalAlignment="Center" Text="高度"/>
+						<NumericUpDown Margin="5,3"
+									   Width="120"
+									   Increment="50"
+									   Value="{Binding DiagramViewModel.Option.Height}"/>
+					</StackPanel>
+				</StackPanel>
+			</HeaderedContentControl>
+		</StackPanel>
+
+		<ScrollViewer Grid.Row="1"
+					  HorizontalScrollBarVisibility="Auto">
+			<s:DiagramControl DataContext="{Binding DiagramViewModel}">
+				<s:DiagramControl.DataTemplates>
+					<StaticResource ResourceKey="ComponentTemplate"/>
+					<StaticResource ResourceKey="RectangleTemplate"/>
+					<StaticResource ResourceKey="TextLabelTemplate"/>
+				</s:DiagramControl.DataTemplates>
+			</s:DiagramControl>
+		</ScrollViewer>
+		
+		<local:PropertyGrid Grid.Row="1"
+							Margin="5"
+							HorizontalAlignment="Right"
+							VerticalAlignment="Top"
+							Item="{Binding DiagramViewModel.SelectedItem}"
+							IsVisible="{Binding DiagramViewModel.SelectedItem, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+
+		<Border Grid.Row="1"
+				Margin="20"
+				Background="#7fececec"
+				BorderBrush="{StaticResource ToolbarBorderBrush}"
+				BorderThickness="1"
+				CornerRadius="5"
+				HorizontalAlignment="Right"
+				VerticalAlignment="Bottom">
+			<StackPanel Margin="0,5">
+				<Slider Minimum="{Binding DiagramViewModel.Option.ZoomValueMin}"
+						Maximum="{Binding DiagramViewModel.Option.ZoomValueMax}"
+						Margin="0,5"
+						Height="120"
+						Orientation="Vertical"
+						Value="{Binding DiagramViewModel.Option.ZoomValue}"/>
+				<TextBlock FontSize="12"
+						   HorizontalAlignment="Center"
+						   Text="{Binding DiagramViewModel.Option.ZoomValue,StringFormat={}{0:P0}}">
+				</TextBlock>
+			</StackPanel>
+		</Border>
+
+		<Border Grid.Row="2"
+				Height="25"
+				Background="WhiteSmoke"
+				BorderThickness="0,1,0,0"
+				BorderBrush="Gray">
+			<Panel>
+				<TextBlock Name="messageText"
+						   Margin="10,0"
+						   Classes.error="{Binding Message.IsError}"
+						   HorizontalAlignment="Left"
+						   VerticalAlignment="Center"
+						   FontSize="12"
+						   Text="{Binding Message.Message}"/>
+			</Panel>
+		</Border>
+	</Grid>
+</Window>

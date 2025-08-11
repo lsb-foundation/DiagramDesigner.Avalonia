@@ -9,9 +9,9 @@ namespace DiagramDesigner;
 
 internal class RubberbandAdorner : Control
 {
-    private Point startPoint;
-    private Point endPoint;
-    private Pen rubberbandPen;
+    private readonly Point startPoint;
+    private readonly Point endPoint;
+    private readonly Pen rubberbandPen;
 
     private DesignerCanvas designerCanvas;
 

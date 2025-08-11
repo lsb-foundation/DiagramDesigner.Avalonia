@@ -1,0 +1,333 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:s="avalonia.diagram.designer"
+					xmlns:c="using:GasMapEditor.Components"
+					xmlns:cv="using:GasMapEditor.Converters">
+	
+	<s:ColorBrushConverter x:Key="ColorBrushConverter"/>
+	<cv:ValveStateConverter x:Key="ValveStateConverter"/>
+
+	<ControlTemplate x:Key="DefaultComponent"
+					 TargetType="ContentControl"
+					 x:DataType="c:ComponentBase">
+		<Panel IsHitTestVisible="False">
+			<Rectangle StrokeThickness="1"
+					   IsHitTestVisible="False"
+					   Stretch="Uniform"
+                       Fill="{Binding FillColor,Converter={StaticResource ColorBrushConverter}}"/>
+		</Panel>
+	</ControlTemplate>
+
+	<ControlTemplate x:Key="Junction"
+					 TargetType="ContentControl"
+					 x:DataType="c:Junction">
+		<Ellipse Fill="{Binding FillColor, Converter={StaticResource ColorBrushConverter}}"
+                 Stretch="Uniform"
+				 IsHitTestVisible="False"/>
+	</ControlTemplate>
+
+	<ControlTemplate x:Key="Inlet"
+					 TargetType="ContentControl"
+					 x:DataType="c:GasInlet">
+		<Grid RowDefinitions="Auto,*">
+			<Rectangle HorizontalAlignment="Center"
+                       Width="8" Height="4"
+                       Fill="{Binding FillColor,Converter={StaticResource ColorBrushConverter}}"/>
+			<Border Grid.Row="1"
+                    Background="{Binding FillColor,Converter={StaticResource ColorBrushConverter}}"
+                    CornerRadius="5"
+                    IsHitTestVisible="False">
+				<TextBlock HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Text="{Binding InletName}"
+                           Foreground="White"/>
+			</Border>
+		</Grid>
+	</ControlTemplate>
+
+	<ControlTemplate x:Key="Furnace" 
+					 TargetType="ContentControl"
+					 x:DataType="c:Furnace">
+		<Grid IsHitTestVisible="False"
+			  RowDefinitions="*,*"
+			  ColumnDefinitions="*,4*,*">
+			<Border CornerRadius="5,5,0,0"
+                    Grid.Row="0" Grid.Column="1"
+                    Background="{Binding FillColor, Converter={StaticResource ColorBrushConverter}}"/>
+			<Border CornerRadius="5"
+                    Grid.Row="1" Grid.ColumnSpan="3"
+                    Background="{Binding FillColor, Converter={StaticResource ColorBrushConverter}}"/>
+			<TextBlock Grid.Column="1"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Foreground="White"
+                       Text="Furnace"/>
+		</Grid>
+	</ControlTemplate>
+
+	<ControlTemplate x:Key="MFC" 
+					 TargetType="ContentControl"
+					 x:DataType="c:MFC">
+		<Panel>
+			<Border BorderThickness="1"
+					Background="{Binding FillColor,Converter={StaticResource ColorBrushConverter}}"
+					CornerRadius="5"
+					IsHitTestVisible="False">
+				<!--<Border.InputBindings>
+				<MouseBinding MouseAction="LeftDoubleClick" Command="{Binding EditCommand}" CommandParameter="{Binding }" />
+			</Border.InputBindings>-->
+				<Grid RowDefinitions="*,*">
+					<TextBlock Text="{Binding Label}"
+							   Foreground="White"
+							   HorizontalAlignment="Center"
+							   VerticalAlignment="Center"/>
+					<StackPanel Grid.Row="1"
+								Orientation="Horizontal"
+								HorizontalAlignment="Center"
+								VerticalAlignment="Center">
+						<TextBlock Foreground="White"
+								   Text="{Binding Data.Flow, Mode=OneWay}"/>
+						<TextBlock Foreground="White"
+								   Margin="4,0,0,0"
+								   Text="{Binding Data.Unit, Mode=OneWay}"/>
+					</StackPanel>
+				</Grid>
+			</Border>
+			<!--<Button HorizontalAlignment="Right"
+					VerticalAlignment="Bottom"
+					ClipToBounds="False"
+					Margin="3"
+					ToolTip.Tip="Click to edit"
+					Command="{Binding EditCommand}">
+				<Button.Template>
+					<ControlTemplate TargetType="Button">
+						<Panel Width="16" Height="16">
+							<Ellipse x:Name="ellipse"
+									 Stroke="Black"
+									 StrokeThickness="1"
+									 Fill="WhiteSmoke"
+									 Opacity="0.8"
+									 Stretch="Uniform"/>
+						</Panel>
+					</ControlTemplate>
+				</Button.Template>
+			</Button>-->
+		</Panel>
+	</ControlTemplate>
+
+	<ControlTemplate x:Key="Valve"
+					 TargetType="ContentControl"
+					 x:DataType="c:Valve">
+		<ToggleButton IsChecked="{Binding State, Converter={StaticResource ValveStateConverter}}">
+			<ToggleButton.Template>
+				<ControlTemplate TargetType="ToggleButton">
+					<Panel>
+						<Viewbox>
+							<Canvas x:Name="canvas"
+									Width="1024" Height="1024">
+								<Ellipse x:Name="ellipse"
+                                         Height="1024"
+                                         Width="1024"
+                                         Fill="Red"/>
+								<Path Fill="White"
+                                      Data="M 772.23701,458.59642 H 597.22416 a 102.41122,102.41122 0 0 0 -174.75603,0 H 252.01669 a 51.780447,51.780447 0 1 0 0,103.55941 h 168.5582 a 102.37836,102.37836 0 0 0 178.52608,0 h 173.13902 a 51.780454,51.780454 0 1 0 0,-103.5609 z"/>
+							</Canvas>
+						</Viewbox>
+
+						<!--显示标签-->
+						<TextBlock IsHitTestVisible="False"
+                                   Text="{Binding Label}"
+                                   TextWrapping="WrapWithOverflow"
+                                   HorizontalAlignment="Right"
+                                   VerticalAlignment="Bottom"
+                                   Margin="0,0,-16,-8"/>
+					</Panel>
+				</ControlTemplate>
+			</ToggleButton.Template>
+			<ToggleButton.Styles>
+				<Style Selector="ToggleButton:checked">
+					<Style Selector="^ /template/ Ellipse#ellipse">
+						<Setter Property="Fill" Value="Green"/>
+					</Style>
+					<Style Selector="^ /template/ Canvas#canvas">
+						<Style.Animations>
+							<Animation Duration="0:0:.2" FillMode="Forward">
+								<KeyFrame Cue="0%">
+									<Setter Property="RotateTransform.Angle" Value="0"/>
+								</KeyFrame>
+								<KeyFrame Cue="100%">
+									<Setter Property="RotateTransform.Angle" Value="90"/>
+								</KeyFrame>
+							</Animation>
+						</Style.Animations>
+					</Style>
+				</Style>
+				<Style Selector="ToggleButton:unchecked">
+					<Style Selector="^ /template/ Ellipse#ellipse">
+						<Setter Property="Fill" Value="Red"/>
+					</Style>
+					<Style Selector="^ /template/ Canvas#canvas">
+						<Style.Animations>
+							<Animation Duration="0:0:.2" FillMode="Forward">
+								<KeyFrame Cue="0%">
+									<Setter Property="RotateTransform.Angle" Value="90"/>
+								</KeyFrame>
+								<KeyFrame Cue="100%">
+									<Setter Property="RotateTransform.Angle" Value="0"/>
+								</KeyFrame>
+							</Animation>
+						</Style.Animations>
+					</Style>
+				</Style>
+			</ToggleButton.Styles>
+		</ToggleButton>
+	</ControlTemplate>
+
+	<ControlTemplate x:Key="Pump"
+					 TargetType="ContentControl"
+					 x:DataType="c:Pump">
+		<ToggleButton IsChecked="{Binding State, Converter={StaticResource ValveStateConverter}}"
+					  Width="{Binding ItemWidth}" Height="{Binding ItemHeight}">
+			<ToggleButton.Template>
+				<ControlTemplate TargetType="ToggleButton">
+					<Grid RowDefinitions="*,*">
+						<!--虚线边框-->
+						<Rectangle Grid.RowSpan="2"
+                                   IsHitTestVisible="False"
+                                   Stroke="Gray"
+                                   StrokeDashArray="2"
+                                   StrokeThickness="1"
+                                   Fill="Transparent"
+								   Stretch="Uniform"/>
+						<!--中间的管道-->
+						<Rectangle Grid.RowSpan="2"
+                                   Fill="Yellow"
+                                   Width="20"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Stretch"/>
+						<!--MBP控制占位形状-->
+						<Rectangle Classes.open="{Binding MBPState, Converter={StaticResource ValveStateConverter}}"
+                                   Fill="Red"
+								   Height="30" Width="50"
+                                   HorizontalAlignment="Center"/>
+						<TextBlock Text="MBP"
+                                   Foreground="White"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"/>
+						<!--DP控制占位形状-->
+						<Rectangle Grid.Row="1"
+								   Fill="Red"
+								   Classes.open="{Binding DPState, Converter={StaticResource ValveStateConverter}}"
+                                   Height="30" Width="50"
+                                   HorizontalAlignment="Center"/>
+						<TextBlock Grid.Row="1"
+                                   Text="DP"
+                                   Foreground="White"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"/>
+						<Grid.Styles>
+							<Style Selector="Rectangle.open">
+								<Setter Property="Fill" Value="Green"/>
+							</Style>
+						</Grid.Styles>
+					</Grid>
+				</ControlTemplate>
+			</ToggleButton.Template>
+		</ToggleButton>
+	</ControlTemplate>
+
+	<ControlTemplate x:Key="Communicating"
+					 TargetType="ContentControl"
+					 x:DataType="c:Communicating">
+		<Grid IsHitTestVisible="False"
+              Background="{Binding FillColor, Converter={StaticResource ColorBrushConverter}}">
+			<TextBlock Text="{Binding Label}"
+                       Foreground="White"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       TextWrapping="WrapWithOverflow"/>
+		</Grid>
+	</ControlTemplate>
+
+	<ControlTemplate x:Key="LimitGasket"
+					 TargetType="ContentControl"
+					 x:DataType="c:LimitGasket">
+		<Panel IsHitTestVisible="False"
+			   Height="{Binding ItemHeight}"
+			   Width="{Binding ItemWidth}">
+			<Path Stretch="Uniform"
+                  Stroke="{Binding FillColor, Converter={StaticResource ColorBrushConverter}}"
+                  StrokeThickness="3"
+				  HorizontalAlignment="Center"
+				  VerticalAlignment="Center">
+				<Path.Data>
+					<GeometryGroup>
+						<PathGeometry Figures="M 18.649471,67.879529 A 110,100 0 0 0 93.649551,94.999837 110,100 0 0 0 168.64961,67.879012"/>
+						<PathGeometry Figures="M 165.49998,83.695655 A 16.30449,16.304489 0 0 0 149.19565,99.999992 16.30449,16.304489 0 0 0 165.49998,116.30434 16.30449,16.304489 0 0 0 181.80435,99.999992 16.30449,16.304489 0 0 0 165.49998,83.695655 Z"/>
+						<PathGeometry Figures="m 18.649471,132.59114 a 110,100 0 0 1 75.000076,-27.12031 110,100 0 0 1 75.000063,27.12083"/>
+					</GeometryGroup>
+				</Path.Data>
+				<Path.RenderTransform>
+					<RotateTransform Angle="-90"/>
+				</Path.RenderTransform>
+			</Path>
+		</Panel>
+	</ControlTemplate>
+
+	<DataTemplate x:Key="ComponentTemplate" DataType="c:ComponentBase">
+		<Panel Tag="{Binding Type}">
+			<ContentControl/>
+			<Panel.Styles>
+				<Style Selector="Panel[Tag=None] ContentControl">
+					<Setter Property="Template" Value="{StaticResource DefaultComponent}"/>
+				</Style>
+				<Style Selector="Panel[Tag=Inlet] ContentControl">
+					<Setter Property="Template" Value="{StaticResource Inlet}"/>
+				</Style>
+				<Style Selector="Panel[Tag=Furnace] ContentControl">
+					<Setter Property="Template" Value="{StaticResource Furnace}"/>
+				</Style>
+				<Style Selector="Panel[Tag=Valve] ContentControl">
+					<Setter Property="Template" Value="{StaticResource Valve}"/>
+				</Style>
+				<Style Selector="Panel[Tag=MFC] ContentControl">
+					<Setter Property="Template" Value="{StaticResource MFC}"/>
+				</Style>
+				<Style Selector="Panel[Tag=Junction] ContentControl">
+					<Setter Property="Template" Value="{StaticResource Junction}"/>
+				</Style>
+				<Style Selector="Panel[Tag=Pump] ContentControl">
+					<Setter Property="Template" Value="{StaticResource Pump}"/>
+				</Style>
+				<Style Selector="Panel[Tag=Communicating] ContentControl">
+					<Setter Property="Template" Value="{StaticResource Communicating}"/>
+				</Style>
+				<Style Selector="Panel[Tag=LimitGasket] ContentControl">
+					<Setter Property="Template" Value="{StaticResource LimitGasket}"/>
+				</Style>
+			</Panel.Styles>
+		</Panel>
+	</DataTemplate>
+
+	<DataTemplate x:Key="RectangleTemplate" DataType="c:Rectangle">
+		<Rectangle IsHitTestVisible="False"
+				   Fill="{Binding FillColor, Converter={StaticResource ColorBrushConverter}}"/>
+	</DataTemplate>
+
+	<DataTemplate x:Key="TextLabelTemplate" DataType="c:TextLabel">
+		<Panel>
+			<TextBox x:Name="text"
+					 Margin="5"
+					 Watermark="请输入..."
+					 BorderThickness="0"
+					 TextWrapping="WrapWithOverflow"
+					 Text="{Binding Text}"/>
+			<Panel.Styles>
+				<Style Selector="TextBox#text:focus /template/ Border">
+					<Setter Property="BorderThickness" Value="0"/>
+				</Style>
+			</Panel.Styles>
+		</Panel>
+	</DataTemplate>
+	
+</ResourceDictionary>

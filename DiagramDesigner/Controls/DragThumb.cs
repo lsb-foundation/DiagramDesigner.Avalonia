@@ -43,6 +43,7 @@ internal class DragThumb : Thumb
             {
                 double left = item.Left;
                 double top = item.Top;
+
                 minLeft = double.IsNaN(left) ? 0 : Math.Min(left, minLeft);
                 minTop = double.IsNaN(top) ? 0 : Math.Min(top, minTop);
 

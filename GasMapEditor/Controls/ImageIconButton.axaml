@@ -1,0 +1,56 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:GasMapEditor">
+
+  <!--
+    Additional resources 
+    Using Control Themes:
+         https://docs.avaloniaui.net/docs/basics/user-interface/styling/control-themes
+    Using Theme Variants:
+         https://docs.avaloniaui.net/docs/guides/styles-and-resources/how-to-use-theme-variants
+  -->
+  
+  <Design.PreviewWith>
+    <StackPanel Width="400" Spacing="10">      
+        <StackPanel Background="{DynamicResource SystemRegionBrush}">
+          <controls:ImageIconButton />
+        </StackPanel>
+    </StackPanel>
+  </Design.PreviewWith>
+ 
+  <ControlTheme x:Key="{x:Type controls:ImageIconButton}" TargetType="controls:ImageIconButton">
+	  <Setter Property="Template">
+		  <ControlTemplate TargetType="controls:ImageIconButton">
+			  <Border x:Name="Border"
+					  BorderThickness="1"
+					  Background="Transparent"
+					  BorderBrush="Transparent"
+					  CornerRadius="3">
+				  <StackPanel Orientation="Vertical">
+					  <Image Source="{TemplateBinding IconSource}"
+							 VerticalAlignment="Bottom"
+							 HorizontalAlignment="Center"
+							 Width="35"/>
+					  <TextBlock Margin="3,0,3,0"
+								 TextWrapping="WrapWithOverflow"
+								 Text="{TemplateBinding Text}"
+								 VerticalAlignment="Center"
+								 HorizontalAlignment="Center"/>
+				  </StackPanel>
+			  </Border>
+		  </ControlTemplate>
+	  </Setter>
+	  <Style Selector="^:pointerover /template/ Border#Border">
+		  <Setter Property="Background" Value="{StaticResource ToolbarSelectedBackgroundBrush}" />
+		  <Setter Property="BorderBrush" Value="{StaticResource SolidBorderBrush}" />
+	  </Style>
+	  <Style Selector="^:pressed /template/ Border#Border">
+		  <Setter Property="Background" Value="{StaticResource ToolbarPressedBrush}" />
+		  <Setter Property="BorderBrush" Value="{StaticResource PressedBorderBrush}" />
+	  </Style>
+	  <Style Selector="^:disabled /template/ Border#Border">
+		  <Setter Property="Background" Value="{StaticResource DisabledBackgroundBrush}" />
+		  <Setter Property="BorderBrush" Value="{StaticResource DisabledBorderBrush}" />
+	  </Style>
+  </ControlTheme>
+</ResourceDictionary>

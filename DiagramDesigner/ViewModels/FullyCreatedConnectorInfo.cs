@@ -25,6 +25,8 @@ public class FullyCreatedConnectorInfo : ConnectorInfoBase
 
     public DesignerItemViewModelBase DataItem { get; private set; }
 
+    public int SerializerIdentity { get; set; }
+
     public bool ShowConnectors
     {
         get => showConnectors;

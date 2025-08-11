@@ -1,0 +1,71 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:s="avalonia.diagram.designer"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="GasMapEditor.GasMapViewer"
+			 x:DataType="s:IDiagramViewModel">
+	
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceInclude Source="/Themes/Components.axaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+
+		<DataTemplate x:Key="designerItemViewerTemplate"
+					  DataType="s:DesignerItemViewModelBase">
+			<Panel Width="{Binding ItemWidth}"
+				   Height="{Binding ItemHeight}">
+				<ContentPresenter HorizontalAlignment="Stretch"
+								  VerticalAlignment="Stretch"
+								  Content="{Binding $parent[ContentPresenter].Content}"/>
+				<Panel.RenderTransform>
+					<RotateTransform Angle="{Binding Angle}"/>
+				</Panel.RenderTransform>
+			</Panel>
+		</DataTemplate>
+
+		<DataTemplate x:Key="connectionViewerTemplate"
+					  DataType="s:ConnectionViewModel">
+			<Canvas Width="{Binding Area.Width}"
+					Height="{Binding Area.Height}">
+				<Polyline Stroke="{Binding LineColor, Converter={x:Static s:ColorBrushConverter.Instance}}"
+						  Points="{Binding ConnectionPoints}"
+						  StrokeThickness="{Binding LineWidth}"/>
+			</Canvas>
+		</DataTemplate>
+		
+		<s:DiagramControlTemplateSelector x:Key="designerViewTemplateSelector"
+										  DesignerItemTemplate="{StaticResource designerItemViewerTemplate}"
+										  ConnectionTemplate="{StaticResource connectionViewerTemplate}"/>
+	
+	</UserControl.Resources>
+
+	<UserControl.DataTemplates>
+		<StaticResource ResourceKey="ComponentTemplate"/>
+		<StaticResource ResourceKey="RectangleTemplate"/>
+		<StaticResource ResourceKey="TextLabelTemplate"/>
+	</UserControl.DataTemplates>
+
+	<ItemsControl ItemsSource="{Binding Items}"
+				  ItemTemplate="{StaticResource designerViewTemplateSelector}">
+		<ItemsControl.ItemsPanel>
+			<ItemsPanelTemplate>
+				<Canvas Width="{Binding Option.Width}"
+						Height="{Binding Option.Height}"/>
+			</ItemsPanelTemplate>
+		</ItemsControl.ItemsPanel>
+
+		<ItemsControl.Styles>
+			<Style Selector="ContentPresenter" x:DataType="s:SelectableDesignerItemViewModelBase">
+				<Setter Property="Canvas.Left" Value="{Binding Left}"/>
+				<Setter Property="Canvas.Top" Value="{Binding Top}"/>
+				<Setter Property="ZIndex" Value="{Binding ZIndex}"/>
+				<Setter Property="ClipToBounds" Value="False"/>
+			</Style>
+		</ItemsControl.Styles>
+	</ItemsControl>
+	
+</UserControl>
